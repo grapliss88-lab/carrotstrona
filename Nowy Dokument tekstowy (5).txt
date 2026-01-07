@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CarrotMC.pl</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+            background-color: #000;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .header {
+            width: 100%;
+            padding: 60px 20px;
+            text-align: center;
+            background: radial-gradient(circle, rgba(255,140,0,0.2) 0%, rgba(0,0,0,1) 80%);
+        }
+
+        .site-title {
+            font-size: 4rem;
+            font-weight: 900;
+            color: #ff8c00;
+            margin: 0;
+            text-shadow: 0 0 30px rgba(255, 140, 0, 0.5);
+        }
+
+        h1 {
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin: 10px 0 40px 0;
+            color: white;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 50px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            text-decoration: none;
+            padding: 18px 45px;
+            border-radius: 10px;
+            font-weight: 900;
+            text-transform: uppercase;
+            font-size: 1.2rem;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Guzik Sklep */
+        .btn-shop {
+            background: #ff8c00;
+            color: white;
+            border: none;
+            box-shadow: 0 0 20px rgba(255, 140, 0, 0.4);
+        }
+
+        /* Guzik Discord */
+        .btn-discord {
+            background: #5865F2; /* Kolor Discorda */
+            color: white;
+            border: none;
+            box-shadow: 0 0 20px rgba(88, 101, 242, 0.4);
+        }
+
+        .btn:hover {
+            background: white;
+            color: #000;
+            transform: scale(1.05);
+        }
+
+        .rules-section {
+            width: 90%;
+            max-width: 1000px;
+            background: #111;
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid #333;
+            margin-bottom: 80px;
+        }
+
+        .rules-section h2 {
+            color: #ff8c00;
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            border-bottom: 2px solid #ff8c00;
+            padding-bottom: 10px;
+        }
+
+        .rule {
+            padding: 15px;
+            border-bottom: 1px solid #222;
+            color: #ddd;
+            font-size: 1.1rem;
+            line-height: 1.5;
+        }
+
+        .rule b { color: #ff8c00; margin-right: 12px; }
+        .highlight { color: #ffcc00; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <p class="site-title">CarrotMC.pl</p>
+        <h1>Witaj na serwerze!</h1>
+
+        <div class="btn-container">
+            <a href="https://vishop.pl/shop/23198" target="_blank" class="btn btn-shop">🛒 SKLEP</a>
+            <a href="https://discord.gg/RbjxGdRmGG" target="_blank" class="btn btn-discord">💬 DISCORD</a>
+        </div>
+    </div>
+
+    <div class="rules-section">
+        <h2>🥕 PEŁNY REGULAMIN</h2>
+        <div class="rule"><b>1.1</b> Zakazuje się posiadać modyfikacje zapewniające przewagę w rozgrywce.</div>
+        <div class="rule"><b>1.2</b> Zakazuje się umyślnego wykorzystywania błędów serwera oraz gry. Wykryty błąd zgłoś administracji.</div>
+        <div class="rule"><b>1.3</b> Zakazuje się tworzenia kont w celu ominięcia bana lub odniesienia korzyści na serwerze.</div>
+        <div class="rule"><b>1.4</b> Zakazuje się upubliczniania danych osobowych innych użytkowników.</div>
+        <div class="rule"><b>1.5</b> Zakazuje się zaśmiecania czatu (spamowania, floodowania, pisania wielkimi literami itp.).</div>
+        <div class="rule"><b>1.6</b> Zakazuje się sprzedawania przedmiotów, kont itp. za <span class="highlight">realne pieniądze</span>.</div>
+        <div class="rule"><b>1.6.1</b> Wyjątkiem jest TOP DONATE na streamach (dostępne tylko dla rangi @Media).</div>
+        <div class="rule"><b>1.7</b> Zakazuje się działania na szkodę serwera oraz innych graczy.</div>
+        <div class="rule"><b>1.8</b> Zakazuje się sztucznego nabijania statystyk.</div>
+        <div class="rule"><b>1.8.1</b> Kupowanie zabójstw tylko za itemy w grze. Limit: 2 na edycje.</div>
+        <div class="rule"><b>1.9</b> Zakazuje się współpracy z osobami posiadającymi cheaty lub blokadę konta.</div>
+        <div class="rule"><b>1.10</b> <span class="highlight">Administracja nie ponosi odpowiedzialności za stracone przedmioty.</span></div>
+        <div class="rule"><b>1.11</b> Administracja może wezwać gracza na sprawdzenie (Discord/aplikacja zewnętrzna).</div>
+        <div class="rule"><b>1.12</b> Zakazuje się utrudniania gry innym osobom na serwerze.</div>
+        <div class="rule"><b>1.13</b> Zakazuje się obrazy, prowokacji, zachowań wulgarnych, rasistowskich i nazistowskich.</div>
+        <div class="rule"><b>1.14</b> Zakazuje się reklamowania rzeczy nie związanych z serwerem Carrotmc.pl</div>
+    </div>
+
+</body>
+</html>
