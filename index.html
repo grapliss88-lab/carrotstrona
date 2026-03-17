@@ -11,6 +11,7 @@
             --bg: #0f081d;
             --glass: rgba(255, 255, 255, 0.07);
             --glass-border: rgba(255, 255, 255, 0.12);
+            --success: #2ecc71;
         }
 
         body {
@@ -55,6 +56,8 @@
             text-transform: uppercase;
             color: white;
             text-align: center;
+            text-decoration: none;
+            display: inline-block;
         }
 
         .order-btn { background: var(--primary); box-shadow: 0 4px 15px rgba(125, 95, 255, 0.3); }
@@ -80,9 +83,24 @@
             background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); 
             border-radius: 12px; color: white; font-family: inherit; box-sizing: border-box;
         }
-        .submit-btn { width: 100%; padding: 16px; background: #2ecc71; border: none; color: white; font-weight: 600; border-radius: 12px; cursor: pointer; margin-top: 15px; }
+        .submit-btn { width: 100%; padding: 16px; background: var(--success); border: none; color: white; font-weight: 600; border-radius: 12px; cursor: pointer; margin-top: 15px; }
 
         .footer { position: absolute; bottom: 20px; z-index: 10; opacity: 0.5; font-size: 0.8rem; }
+        
+        /* Styl dla linku w modalu sukcesu */
+        .discord-link-btn {
+            background: #5865F2;
+            display: block;
+            margin-top: 20px;
+            padding: 15px;
+            text-align: center;
+            border-radius: 12px;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .discord-link-btn:hover { background: #4752c4; }
     </style>
 </head>
 <body>
@@ -132,7 +150,21 @@
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('rulesModal')">×</span>
             <h2 style="color:var(--primary); margin-top:0">Regulamin mmcode</h2>
-            <p>1.1 Brak ticketów bez powodu.<br>1.2 Zakaz treści +18.<br>2.1 Płatności tylko u @borexxx.<br>2.2 BLIK / PSC / Przelew.</p>
+            <p>1.1 Brak ticketów bez powodu.<br>
+               1.2 Zakaz treści +18.<br>
+               2.1 Płatności tylko u @borexxx.<br>
+               2.2 BLIK / PSC / Przelew.<br>
+               <strong>3.1 Po wysłaniu zgłoszenia wymagane jest dołączenie na serwer Discord w celu kontynuacji kontaktu.</strong></p>
+        </div>
+    </div>
+
+    <div id="successModal" class="modal-overlay">
+        <div class="modal-content" style="text-align: center;">
+            <h2 style="color: var(--success); margin-top:0">✅ Wysłano pomyślnie!</h2>
+            <p>Twoje zgłoszenie zostało zarejestrowane w systemie.</p>
+            <p>Abyśmy mogli zrealizować Twoją prośbę, <strong>musisz dołączyć do naszego serwera Discord</strong>.</p>
+            <a href="https://discord.gg/4zVrNwWWmV" target="_blank" class="discord-link-btn">DOŁĄCZ DO DISCORDA</a>
+            <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 20px; cursor: pointer;" onclick="closeModal('successModal')">Zamknij to okno</p>
         </div>
     </div>
 
@@ -169,10 +201,14 @@
                     embeds: [{ title: title, color: 8216575, fields: fields, timestamp: new Date().toISOString() }]
                 })
             }).then(() => {
-                alert('Wysłano pomyślnie!');
                 closeModal(modalId);
                 document.getElementById(modalId === 'orderModal' ? 'orderForm' : 'collabForm').reset();
-            }).catch(() => alert('Błąd wysyłki!'));
+                
+                // Pokazujemy modal z zachętą do Discorda zamiast zwykłego alertu
+                setTimeout(() => {
+                    openModal('successModal');
+                }, 400);
+            }).catch(() => alert('Błąd wysyłki! Spróbuj ponownie później.'));
         }
 
         function openModal(id) {
