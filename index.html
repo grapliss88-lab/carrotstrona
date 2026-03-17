@@ -3,148 +3,218 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CarrotMC.pl</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+    <title>mmcode.net.pl</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-color: #1a0b2e;
+            --accent-color: #7d5fff;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --success-color: #2ecc71;
+        }
+
         body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Montserrat', sans-serif;
-            background-color: #000;
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg-color);
+            /* Efekt fioletowych "deficytów"/gradientów w tle */
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(125, 95, 255, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(125, 95, 255, 0.1) 0%, transparent 40%),
+                url('https://www.transparenttextures.com/patterns/stardust.png'); /* Subtelny efekt ziarna */
             color: white;
+            margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-        }
-
-        .header {
-            width: 100%;
-            padding: 60px 20px;
-            text-align: center;
-            background: radial-gradient(circle, rgba(255,140,0,0.2) 0%, rgba(0,0,0,1) 80%);
-        }
-
-        .site-title {
-            font-size: 4rem;
-            font-weight: 900;
-            color: #ff8c00;
-            margin: 0;
-            text-shadow: 0 0 30px rgba(255, 140, 0, 0.5);
-        }
-
-        h1 {
-            font-size: 2rem;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin: 10px 0 40px 0;
-            color: white;
-        }
-
-        .btn-container {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 50px;
             justify-content: center;
-            flex-wrap: wrap;
+            min-height: 100vh;
+            overflow: hidden;
         }
 
-        .btn {
+        /* Logo / Nazwa strony */
+        .logo {
+            position: absolute;
+            top: 40px;
+            font-size: 1.8rem;
+            font-weight: 600;
+            cursor: pointer;
             text-decoration: none;
-            padding: 18px 45px;
-            border-radius: 10px;
-            font-weight: 900;
+            color: white;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+        .logo:hover {
+            text-shadow: 0 0 15px var(--accent-color);
+        }
+
+        /* Przycisk 3D */
+        .order-btn {
+            padding: 22px 70px;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: white;
+            background: var(--accent-color);
+            border: none;
+            border-radius: 18px;
+            cursor: pointer;
+            box-shadow: 0 9px 0 #5741b8, 0 15px 25px rgba(0,0,0,0.3);
+            transition: all 0.1s ease;
             text-transform: uppercase;
-            font-size: 1.2rem;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            letter-spacing: 2px;
         }
 
-        /* Guzik Sklep */
-        .btn-shop {
-            background: #ff8c00;
-            color: white;
-            border: none;
-            box-shadow: 0 0 20px rgba(255, 140, 0, 0.4);
+        .order-btn:hover {
+            background-color: #8c72ff;
+        }
+        
+        .order-btn:active {
+            box-shadow: 0 4px 0 #5741b8;
+            transform: translateY(5px);
         }
 
-        /* Guzik Discord */
-        .btn-discord {
-            background: #5865F2; /* Kolor Discorda */
-            color: white;
-            border: none;
-            box-shadow: 0 0 20px rgba(88, 101, 242, 0.4);
+        /* Modal (Formularz) */
+        #formOverlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 100;
         }
 
-        .btn:hover {
-            background: white;
-            color: #000;
-            transform: scale(1.05);
-        }
-
-        .rules-section {
-            width: 90%;
-            max-width: 1000px;
-            background: #111;
+        #formContainer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(40, 30, 60, 0.9);
             padding: 40px;
-            border-radius: 20px;
-            border: 1px solid #333;
-            margin-bottom: 80px;
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
         }
 
-        .rules-section h2 {
-            color: #ff8c00;
-            text-align: center;
-            font-size: 2.5rem;
-            margin-bottom: 40px;
-            border-bottom: 2px solid #ff8c00;
-            padding-bottom: 10px;
+        h2 { margin-top: 0; font-weight: 600; color: var(--accent-color); }
+
+        input, textarea {
+            width: 100%;
+            padding: 14px;
+            margin: 10px 0;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            box-sizing: border-box;
+            font-family: inherit;
         }
 
-        .rule {
-            padding: 15px;
-            border-bottom: 1px solid #222;
-            color: #ddd;
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--success-color);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
             font-size: 1.1rem;
-            line-height: 1.5;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: transform 0.2s, background 0.2s;
         }
 
-        .rule b { color: #ff8c00; margin-right: 12px; }
-        .highlight { color: #ffcc00; font-weight: bold; }
+        .submit-btn:hover { background: #27ae60; transform: scale(1.02); }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: rgba(255,255,255,0.5);
+        }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <p class="site-title">CarrotMC.pl</p>
-        <h1>Witaj na serwerze!</h1>
+    <a href="." class="logo">mmcode.net.pl</a>
 
-        <div class="btn-container">
-            <a href="https://vishop.pl/shop/23198" target="_blank" class="btn btn-shop">🛒 SKLEP</a>
-            <a href="https://discord.gg/RbjxGdRmGG" target="_blank" class="btn btn-discord">💬 DISCORD</a>
+    <button class="order-btn" onclick="openForm()">ZAMÓW</button>
+
+    <div id="formOverlay">
+        <div id="formContainer">
+            <span class="close-btn" onclick="closeForm()">×</span>
+            <h2>Nowe zamówienie</h2>
+            <form id="orderForm">
+                <input type="tel" id="phone" placeholder="Numer telefonu" required>
+                <input type="email" id="email" placeholder="Adres e-mail" required>
+                <input type="text" id="title" placeholder="Tytuł zamówienia" required>
+                <textarea id="desc" rows="5" placeholder="Opis zamówienia - co mamy zakodować?" required></textarea>
+                <button type="submit" class="submit-btn">WYŚLIJ ZAMÓWIENIE</button>
+            </form>
         </div>
     </div>
 
-    <div class="rules-section">
-        <h2>🥕 PEŁNY REGULAMIN</h2>
-        <div class="rule"><b>1.1</b> Zakazuje się posiadać modyfikacje zapewniające przewagę w rozgrywce.</div>
-        <div class="rule"><b>1.2</b> Zakazuje się umyślnego wykorzystywania błędów serwera oraz gry. Wykryty błąd zgłoś administracji.</div>
-        <div class="rule"><b>1.3</b> Zakazuje się tworzenia kont w celu ominięcia bana lub odniesienia korzyści na serwerze.</div>
-        <div class="rule"><b>1.4</b> Zakazuje się upubliczniania danych osobowych innych użytkowników.</div>
-        <div class="rule"><b>1.5</b> Zakazuje się zaśmiecania czatu (spamowania, floodowania, pisania wielkimi literami itp.).</div>
-        <div class="rule"><b>1.6</b> Zakazuje się sprzedawania przedmiotów, kont itp. za <span class="highlight">realne pieniądze</span>.</div>
-        <div class="rule"><b>1.6.1</b> Wyjątkiem jest TOP DONATE na streamach (dostępne tylko dla rangi @Media).</div>
-        <div class="rule"><b>1.7</b> Zakazuje się działania na szkodę serwera oraz innych graczy.</div>
-        <div class="rule"><b>1.8</b> Zakazuje się sztucznego nabijania statystyk.</div>
-        <div class="rule"><b>1.8.1</b> Kupowanie zabójstw tylko za itemy w grze. Limit: 2 na edycje.</div>
-        <div class="rule"><b>1.9</b> Zakazuje się współpracy z osobami posiadającymi cheaty lub blokadę konta.</div>
-        <div class="rule"><b>1.10</b> <span class="highlight">Administracja nie ponosi odpowiedzialności za stracone przedmioty.</span></div>
-        <div class="rule"><b>1.11</b> Administracja może wezwać gracza na sprawdzenie (Discord/aplikacja zewnętrzna).</div>
-        <div class="rule"><b>1.12</b> Zakazuje się utrudniania gry innym osobom na serwerze.</div>
-        <div class="rule"><b>1.13</b> Zakazuje się obrazy, prowokacji, zachowań wulgarnych, rasistowskich i nazistowskich.</div>
-        <div class="rule"><b>1.14</b> Zakazuje się reklamowania rzeczy nie związanych z serwerem Carrotmc.pl</div>
-    </div>
+    <script>
+        function openForm() { document.getElementById('formOverlay').style.display = 'block'; }
+        function closeForm() { document.getElementById('formOverlay').style.display = 'none'; }
 
+        // Zamykanie po kliknięciu poza formularz
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('formOverlay')) { closeForm(); }
+        }
+
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // TUTAJ WKLEJ LINK ZE SWOJEGO WORKERA CLOUDFLARE:
+            const workerURL = "royal-cloud-8f0d.grapliss88.workers.dev"; 
+
+            const data = {
+                username: "System mmcode.net.pl",
+                embeds: [{
+                    title: "🚀 Nowe zamówienie wpadło!",
+                    color: 8216575,
+                    fields: [
+                        { name: "📱 Telefon", value: document.getElementById('phone').value, inline: true },
+                        { name: "📧 Email", value: document.getElementById('email').value, inline: true },
+                        { name: "📌 Projekt", value: document.getElementById('title').value },
+                        { name: "📝 Opis", value: document.getElementById('desc').value }
+                    ],
+                    footer: { text: "Wysłano ze strony mmcode.net.pl" },
+                    timestamp: new Date().toISOString()
+                }]
+            };
+
+            const btn = e.target.querySelector('button');
+            btn.innerText = "WYSYŁANIE...";
+            btn.disabled = true;
+
+            fetch(workerURL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            }).then(() => {
+                alert('Dzięki! Zamówienie zostało wysłane na nasz serwer Discord.');
+                closeForm();
+                document.getElementById('orderForm').reset();
+            }).catch(err => {
+                alert('Błąd! Spróbuj ponownie później.');
+                console.error(err);
+            }).finally(() => {
+                btn.innerText = "WYŚLIJ ZAMÓWIENIE";
+                btn.disabled = false;
+            });
+        });
+    </script>
 </body>
 </html>
