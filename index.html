@@ -4,23 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>mmcode.net.pl</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #1a0b2e;
-            --accent-color: #7d5fff;
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --success-color: #2ecc71;
+            --primary: #7d5fff;
+            --bg: #0f081d;
+            --glass: rgba(255, 255, 255, 0.07);
+            --glass-border: rgba(255, 255, 255, 0.12);
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: var(--bg-color);
-            /* Efekt fioletowych "deficytów"/gradientów w tle */
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(125, 95, 255, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(125, 95, 255, 0.1) 0%, transparent 40%),
-                url('https://www.transparenttextures.com/patterns/stardust.png'); /* Subtelny efekt ziarna */
+            background: var(--bg);
             color: white;
             margin: 0;
             display: flex;
@@ -29,191 +24,197 @@
             justify-content: center;
             min-height: 100vh;
             overflow: hidden;
+            background: radial-gradient(circle at 50% 50%, #1e123a 0%, #0f081d 100%);
         }
 
-        /* Logo / Nazwa strony */
-        .logo {
+        /* Animowane tło (pływające kule) */
+        .blob {
             position: absolute;
-            top: 40px;
-            font-size: 1.8rem;
+            width: 300px;
+            height: 300px;
+            background: var(--primary);
+            filter: blur(80px);
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.2;
+            animation: move 20s infinite alternate;
+        }
+
+        @keyframes move {
+            from { transform: translate(-50%, -50%); }
+            to { transform: translate(50%, 50%); }
+        }
+
+        .logo {
+            font-size: 2.5rem;
             font-weight: 600;
-            cursor: pointer;
             text-decoration: none;
             color: white;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
+            margin-bottom: 50px;
+            letter-spacing: -1px;
+            transition: 0.3s;
         }
-        .logo:hover {
-            text-shadow: 0 0 15px var(--accent-color);
+        .logo:hover { text-shadow: 0 0 20px var(--primary); }
+
+        .btn-container {
+            display: flex;
+            gap: 20px;
         }
 
-        /* Przycisk 3D */
-        .order-btn {
-            padding: 22px 70px;
-            font-size: 1.6rem;
+        /* Styl przycisków */
+        .btn {
+            padding: 18px 40px;
+            font-size: 1.1rem;
             font-weight: 600;
-            color: white;
-            background: var(--accent-color);
-            border: none;
-            border-radius: 18px;
+            border-radius: 15px;
             cursor: pointer;
-            box-shadow: 0 9px 0 #5741b8, 0 15px 25px rgba(0,0,0,0.3);
-            transition: all 0.1s ease;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: none;
             text-transform: uppercase;
-            letter-spacing: 2px;
         }
 
-        .order-btn:hover {
-            background-color: #8c72ff;
+        .order-btn {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 10px 20px rgba(125, 95, 255, 0.3);
         }
-        
-        .order-btn:active {
-            box-shadow: 0 4px 0 #5741b8;
-            transform: translateY(5px);
-        }
+        .order-btn:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(125, 95, 255, 0.4); }
 
-        /* Modal (Formularz) */
-        #formOverlay {
+        .rules-btn {
+            background: var(--glass);
+            color: white;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+        }
+        .rules-btn:hover { background: rgba(255,255,255,0.15); transform: translateY(-5px); }
+
+        /* Modale */
+        .modal-overlay {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
             z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s;
         }
 
-        #formContainer {
+        .modal-content {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(40, 30, 60, 0.9);
+            top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: var(--glass);
             padding: 40px;
-            border-radius: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            width: 90%;
-            max-width: 450px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+            border-radius: 30px;
+            border: 1px solid var(--glass-border);
+            width: 90%; max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
         }
 
-        h2 { margin-top: 0; font-weight: 600; color: var(--accent-color); }
-
+        /* Formularz */
         input, textarea {
-            width: 100%;
-            padding: 14px;
-            margin: 10px 0;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            color: white;
-            box-sizing: border-box;
-            font-family: inherit;
+            width: 100%; padding: 15px; margin: 10px 0;
+            background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border);
+            border-radius: 12px; color: white; font-family: inherit;
         }
-
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: var(--accent-color);
-        }
-
         .submit-btn {
-            width: 100%;
-            padding: 16px;
-            background: var(--success-color);
-            border: none;
-            border-radius: 12px;
-            color: white;
-            font-weight: 600;
-            font-size: 1.1rem;
-            cursor: pointer;
-            margin-top: 15px;
-            transition: transform 0.2s, background 0.2s;
+            width: 100%; padding: 15px; background: #2ecc71;
+            border: none; border-radius: 12px; color: white; font-weight: 600;
+            cursor: pointer; margin-top: 10px;
         }
 
-        .submit-btn:hover { background: #27ae60; transform: scale(1.02); }
-
-        .close-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            cursor: pointer;
-            font-size: 1.5rem;
-            color: rgba(255,255,255,0.5);
-        }
+        /* Regulamin (tekst) */
+        .rules-list { text-align: left; line-height: 1.6; }
+        .rules-list h3 { color: var(--primary); margin-bottom: 5px; }
+        .rules-list p { margin-top: 0; font-size: 0.9rem; opacity: 0.8; }
+        .close-btn { float: right; cursor: pointer; font-size: 1.5rem; opacity: 0.5; }
     </style>
 </head>
 <body>
 
+    <div class="blob"></div>
     <a href="." class="logo">mmcode.net.pl</a>
 
-    <button class="order-btn" onclick="openForm()">ZAMÓW</button>
+    <div class="btn-container">
+        <button class="btn order-btn" onclick="openModal('orderModal')">ZAMÓW</button>
+        <button class="btn rules-btn" onclick="openModal('rulesModal')">REGULAMIN</button>
+    </div>
 
-    <div id="formOverlay">
-        <div id="formContainer">
-            <span class="close-btn" onclick="closeForm()">×</span>
-            <h2>Nowe zamówienie</h2>
+    <div id="orderModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('orderModal')">×</span>
+            <h2>Składanie zamówienia</h2>
             <form id="orderForm">
-                <input type="tel" id="phone" placeholder="Numer telefonu" required>
-                <input type="email" id="email" placeholder="Adres e-mail" required>
+                <input type="tel" id="phone" placeholder="Nr telefonu" required>
+                <input type="email" id="email" placeholder="Email" required>
                 <input type="text" id="title" placeholder="Tytuł zamówienia" required>
-                <textarea id="desc" rows="5" placeholder="Opis zamówienia - co mamy zakodować?" required></textarea>
-                <button type="submit" class="submit-btn">WYŚLIJ ZAMÓWIENIE</button>
+                <textarea id="desc" rows="4" placeholder="Opis projektu..." required></textarea>
+                <button type="submit" class="submit-btn">WYŚLIJ DO DISCORDA</button>
             </form>
         </div>
     </div>
 
-    <script>
-        function openForm() { document.getElementById('formOverlay').style.display = 'block'; }
-        function closeForm() { document.getElementById('formOverlay').style.display = 'none'; }
+    <div id="rulesModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('rulesModal')">×</span>
+            <h2 style="color: var(--primary)">Regulamin mmcode</h2>
+            <div class="rules-list">
+                <h3>1. Ogólne</h3>
+                <p>1.1 nie tolerujemy tworzenia ticketów bez wyraźnego powodu.<br>
+                   1.2 wysyłanie treści dla dorosłych = ban</p>
+                <h3>2. Płatności</h3>
+                <p>2.1 płatności przyjmuje tylko wyłącznie @borexxx<br>
+                   2.2 płatności blik przelew psc<br>
+                   2.3 po przyjęciu płatności wysyłamy umówioną usługę</p>
+                <h3>3. Społeczność</h3>
+                <p>3.1 nie tolerujemy ubliżania innym (1 sytuacja = mute 7 dni)<br>
+                   3.2 zachęcanie do dołączania na inne serwery = ban<br>
+                   3.3 wysyłanie treści na kanały nie przeznaczone do tego = mute lub ban</p>
+            </div>
+        </div>
+    </div>
 
-        // Zamykanie po kliknięciu poza formularz
-        window.onclick = function(event) {
-            if (event.target == document.getElementById('formOverlay')) { closeForm(); }
+    <script>
+        function openModal(id) {
+            const m = document.getElementById(id);
+            m.style.display = 'block';
+            setTimeout(() => m.style.opacity = '1', 10);
+        }
+        function closeModal(id) {
+            const m = document.getElementById(id);
+            m.style.opacity = '0';
+            setTimeout(() => m.style.display = 'none', 300);
         }
 
         document.getElementById('orderForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            // TUTAJ WKLEJ LINK ZE SWOJEGO WORKERA CLOUDFLARE:
-            const workerURL = "https://royal-cloud-8f0d.grapliss88.workers.dev/"; 
+            const webhookURL = "https://discord.com/api/webhooks/1483415994733953156/G7t2byCRkdbdZXE15Na8shY0ZkFH3UclgA1IQmZ8kLm-sEOjq_k41aNLCpnfXizMwHws"; // <--- WKLEJ LINK!
 
             const data = {
-                username: "System mmcode.net.pl",
+                username: "System mmcode",
                 embeds: [{
-                    title: "🚀 Nowe zamówienie wpadło!",
+                    title: "🚀 NOWE ZAMÓWIENIE!",
                     color: 8216575,
                     fields: [
                         { name: "📱 Telefon", value: document.getElementById('phone').value, inline: true },
                         { name: "📧 Email", value: document.getElementById('email').value, inline: true },
-                        { name: "📌 Projekt", value: document.getElementById('title').value },
+                        { name: "📌 Tytuł", value: document.getElementById('title').value },
                         { name: "📝 Opis", value: document.getElementById('desc').value }
                     ],
-                    footer: { text: "Wysłano ze strony mmcode.net.pl" },
                     timestamp: new Date().toISOString()
                 }]
             };
 
-            const btn = e.target.querySelector('button');
-            btn.innerText = "WYSYŁANIE...";
-            btn.disabled = true;
-
-            fetch(workerURL, {
+            fetch(webhookURL, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
             }).then(() => {
-                alert('Dzięki! Zamówienie zostało wysłane na nasz serwer Discord.');
-                closeForm();
+                alert('Wysłano pomyślnie!');
+                closeModal('orderModal');
                 document.getElementById('orderForm').reset();
-            }).catch(err => {
-                alert('Błąd! Spróbuj ponownie później.');
-                console.error(err);
-            }).finally(() => {
-                btn.innerText = "WYŚLIJ ZAMÓWIENIE";
-                btn.disabled = false;
-            });
+            }).catch(() => alert('Błąd wysyłki!'));
         });
     </script>
 </body>
