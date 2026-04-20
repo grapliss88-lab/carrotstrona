@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mmcode.net.pl</title>
+    <title>mmcode.online</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -11,7 +11,6 @@
             --bg: #0f081d;
             --glass: rgba(255, 255, 255, 0.07);
             --glass-border: rgba(255, 255, 255, 0.12);
-            --success: #2ecc71;
         }
 
         body {
@@ -56,8 +55,6 @@
             text-transform: uppercase;
             color: white;
             text-align: center;
-            text-decoration: none;
-            display: inline-block;
         }
 
         .order-btn { background: var(--primary); box-shadow: 0 4px 15px rgba(125, 95, 255, 0.3); }
@@ -83,24 +80,9 @@
             background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); 
             border-radius: 12px; color: white; font-family: inherit; box-sizing: border-box;
         }
-        .submit-btn { width: 100%; padding: 16px; background: var(--success); border: none; color: white; font-weight: 600; border-radius: 12px; cursor: pointer; margin-top: 15px; }
+        .submit-btn { width: 100%; padding: 16px; background: #2ecc71; border: none; color: white; font-weight: 600; border-radius: 12px; cursor: pointer; margin-top: 15px; }
 
         .footer { position: absolute; bottom: 20px; z-index: 10; opacity: 0.5; font-size: 0.8rem; }
-        
-        /* Styl dla linku w modalu sukcesu */
-        .discord-link-btn {
-            background: #5865F2;
-            display: block;
-            margin-top: 20px;
-            padding: 15px;
-            text-align: center;
-            border-radius: 12px;
-            text-decoration: none;
-            color: white;
-            font-weight: 600;
-            transition: 0.3s;
-        }
-        .discord-link-btn:hover { background: #4752c4; }
     </style>
 </head>
 <body>
@@ -108,7 +90,7 @@
     <div id="particles-js"></div>
 
     <div class="header-logo">
-        <h1>mmcode<span>.net.pl</span></h1>
+        <h1>mmcode<span>.online</span></h1>
     </div>
 
     <div class="btn-container">
@@ -117,7 +99,7 @@
         <button class="btn collab-btn" onclick="openModal('collabModal')">🤝 WSPÓŁPRACA</button>
     </div>
 
-    <div class="footer">mmcode.net.pl © 2026 | <a href="https://discord.gg/4zVrNwWWmV" style="color:white">Discord</a></div>
+    <div class="footer">mmcode.online © 2026 | <a href="https://discord.gg/4zVrNwWWmV" style="color:white">Discord</a></div>
 
     <div id="orderModal" class="modal-overlay">
         <div class="modal-content">
@@ -150,21 +132,7 @@
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('rulesModal')">×</span>
             <h2 style="color:var(--primary); margin-top:0">Regulamin mmcode</h2>
-            <p>1.1 Brak ticketów bez powodu.<br>
-               1.2 Zakaz treści +18.<br>
-               2.1 Płatności tylko u @borexxx.<br>
-               2.2 BLIK / PSC / Przelew.<br>
-               <strong>3.1 Po wysłaniu zgłoszenia wymagane jest dołączenie na serwer Discord w celu kontynuacji kontaktu.</strong></p>
-        </div>
-    </div>
-
-    <div id="successModal" class="modal-overlay">
-        <div class="modal-content" style="text-align: center;">
-            <h2 style="color: var(--success); margin-top:0">✅ Wysłano pomyślnie!</h2>
-            <p>Twoje zgłoszenie zostało zarejestrowane w systemie.</p>
-            <p>Abyśmy mogli zrealizować Twoją prośbę, <strong>musisz dołączyć do naszego serwera Discord</strong>.</p>
-            <a href="https://discord.gg/4zVrNwWWmV" target="_blank" class="discord-link-btn">DOŁĄCZ DO DISCORDA</a>
-            <p style="font-size: 0.8rem; opacity: 0.6; margin-top: 20px; cursor: pointer;" onclick="closeModal('successModal')">Zamknij to okno</p>
+            <p>1.1 Brak ticketów bez powodu.<br>1.2 Zakaz treści +18.<br>2.1 Płatności tylko u @borexxx.<br>2.2 BLIK / PSC / Przelew.</p>
         </div>
     </div>
 
@@ -201,14 +169,10 @@
                     embeds: [{ title: title, color: 8216575, fields: fields, timestamp: new Date().toISOString() }]
                 })
             }).then(() => {
+                alert('Wysłano pomyślnie!');
                 closeModal(modalId);
                 document.getElementById(modalId === 'orderModal' ? 'orderForm' : 'collabForm').reset();
-                
-                // Pokazujemy modal z zachętą do Discorda zamiast zwykłego alertu
-                setTimeout(() => {
-                    openModal('successModal');
-                }, 400);
-            }).catch(() => alert('Błąd wysyłki! Spróbuj ponownie później.'));
+            }).catch(() => alert('Błąd wysyłki!'));
         }
 
         function openModal(id) {
