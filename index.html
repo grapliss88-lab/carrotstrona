@@ -60,8 +60,21 @@
         .order-btn { background: var(--primary); box-shadow: 0 4px 15px rgba(125, 95, 255, 0.3); }
         .rules-btn { background: var(--glass); border: 1px solid var(--glass-border); backdrop-filter: blur(10px); }
         .collab-btn { grid-column: span 2; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); margin-top: 5px; }
+        
+        .minecraft-banner-btn {
+            grid-column: span 2;
+            height: 120px;
+            background: url('mc-banner.png') center/cover;
+            border-radius: 15px;
+            border: 2px solid var(--glass-border);
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 5px;
+            display: block;
+        }
 
-        .btn:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.4); background: rgba(125, 95, 255, 0.5); }
+        .btn:hover, .minecraft-banner-btn:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
+        .order-btn:hover { background: rgba(125, 95, 255, 0.7); }
 
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -71,7 +84,7 @@
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             background: rgba(20, 10, 40, 0.6); padding: 35px; border-radius: 25px;
             border: 1px solid var(--glass-border); width: 90%; max-width: 550px;
-            max-height: 85vh; overflow-y: auto;
+            max-height: 85vh; overflow-y: auto; text-align: center;
         }
         .close-btn { float: right; cursor: pointer; font-size: 2rem; line-height: 1; opacity: 0.5; }
 
@@ -83,6 +96,15 @@
         .submit-btn { width: 100%; padding: 16px; background: #2ecc71; border: none; color: white; font-weight: 600; border-radius: 12px; cursor: pointer; margin-top: 15px; }
 
         .footer { position: absolute; bottom: 20px; z-index: 10; opacity: 0.5; font-size: 0.8rem; }
+        
+        .status-tag {
+            background: #e74c3c;
+            padding: 5px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
@@ -97,9 +119,23 @@
         <button class="btn order-btn" onclick="openModal('orderModal')">ZAMÓW</button>
         <button class="btn rules-btn" onclick="openModal('rulesModal')">REGULAMIN</button>
         <button class="btn collab-btn" onclick="openModal('collabModal')">🤝 WSPÓŁPRACA</button>
+        <div class="minecraft-banner-btn" onclick="openModal('mcModal')"></div>
     </div>
 
     <div class="footer">mmcode.online © 2026 | <a href="https://discord.gg/4zVrNwWWmV" style="color:white">Discord</a></div>
+
+    <div id="mcModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('mcModal')">×</span>
+            <div class="status-tag">JESZCZE NIE DOSTĘPNE</div>
+            <h2 style="margin: 10px 0;">Serwer Minecraft</h2>
+            <p style="opacity: 0.8;">Pracujemy nad naszym serwerem. Już wkrótce będziesz mógł do nas dołączyć!</p>
+            <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; border: 1px dashed var(--primary); margin-top: 20px;">
+                <span style="display:block; font-size: 0.8rem; opacity: 0.6;">IP SERWERA:</span>
+                <code style="font-size: 1.2rem; color: var(--primary);">mc.mmcode.online</code>
+            </div>
+        </div>
+    </div>
 
     <div id="orderModal" class="modal-overlay">
         <div class="modal-content">
@@ -139,27 +175,6 @@
     <script>
         const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1483415994733953156/G7t2byCRkdbdZXE15Na8shY0ZkFH3UclgA1IQmZ8kLm-sEOjq_k41aNLCpnfXizMwHws";
 
-        // Wysyłanie Zamówienia
-        document.getElementById('orderForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            sendToDiscord("🚀 NOWE ZAMÓWIENIE!", [
-                { name: "📱 Kontakt", value: document.getElementById('phone').value, inline: true },
-                { name: "📧 Email", value: document.getElementById('email').value, inline: true },
-                { name: "📌 Tytuł", value: document.getElementById('title').value },
-                { name: "📝 Opis", value: document.getElementById('desc').value }
-            ], 'orderModal');
-        });
-
-        // Wysyłanie Współpracy
-        document.getElementById('collabForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            sendToDiscord("🤝 NOWA PROŚBA O WSPÓŁPRACĘ!", [
-                { name: "🏰 Nazwa Serwera", value: document.getElementById('serverName').value },
-                { name: "🔗 Link Discord", value: document.getElementById('discordLink').value },
-                { name: "📜 Treść Reklamy", value: document.getElementById('adContent').value }
-            ], 'collabModal');
-        });
-
         function sendToDiscord(title, fields, modalId) {
             fetch(DISCORD_WEBHOOK, {
                 method: 'POST',
@@ -175,6 +190,25 @@
             }).catch(() => alert('Błąd wysyłki!'));
         }
 
+        document.getElementById('orderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            sendToDiscord("🚀 NOWE ZAMÓWIENIE!", [
+                { name: "📱 Kontakt", value: document.getElementById('phone').value, inline: true },
+                { name: "📧 Email", value: document.getElementById('email').value, inline: true },
+                { name: "📌 Tytuł", value: document.getElementById('title').value },
+                { name: "📝 Opis", value: document.getElementById('desc').value }
+            ], 'orderModal');
+        });
+
+        document.getElementById('collabForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            sendToDiscord("🤝 NOWA PROŚBA O WSPÓŁPRACĘ!", [
+                { name: "🏰 Nazwa Serwera", value: document.getElementById('serverName').value },
+                { name: "🔗 Link Discord", value: document.getElementById('discordLink').value },
+                { name: "📜 Treść Reklamy", value: document.getElementById('adContent').value }
+            ], 'collabModal');
+        });
+
         function openModal(id) {
             const m = document.getElementById(id);
             m.style.display = 'block';
@@ -186,7 +220,6 @@
             setTimeout(() => m.style.display = 'none', 300);
         }
 
-        // Kropki tła
         const container = document.getElementById('particles-js');
         for (let i = 0; i < 50; i++) {
             const dot = document.createElement('div');
