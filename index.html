@@ -61,10 +61,10 @@
         .rules-btn { background: var(--glass); border: 1px solid var(--glass-border); backdrop-filter: blur(10px); }
         .collab-btn { grid-column: span 2; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); margin-top: 5px; }
         
-        .minecraft-banner-btn {
+        /* Styl dla bannerów (Minecraft i nowy Discord) */
+        .banner-btn {
             grid-column: span 2;
-            height: 120px;
-            background: url('mc-banner.png') center/cover;
+            height: 110px;
             border-radius: 15px;
             border: 2px solid var(--glass-border);
             cursor: pointer;
@@ -73,8 +73,25 @@
             display: block;
         }
 
-        .btn:hover, .minecraft-banner-btn:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
-        .order-btn:hover { background: rgba(125, 95, 255, 0.7); }
+        /* Używamy plików na maszynie */
+        .mc-banner { background: url('mc-banner.png') center/cover; }
+        .dc-banner { background: url('dc-banner.png') center/cover; } /* Tu podaj nazwę fioletowego pliku */
+
+        .btn:hover, .banner-btn:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.4); border-color: var(--primary); }
+
+        /* Styl dla przycisku w nowym okienku Discord */
+        .join-dc-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 25px;
+            background: #5865F2; /* Kolor Discord */
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .join-dc-btn:hover { background: #4752c4; }
 
         .modal-overlay {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -96,15 +113,6 @@
         .submit-btn { width: 100%; padding: 16px; background: #2ecc71; border: none; color: white; font-weight: 600; border-radius: 12px; cursor: pointer; margin-top: 15px; }
 
         .footer { position: absolute; bottom: 20px; z-index: 10; opacity: 0.5; font-size: 0.8rem; }
-        
-        .status-tag {
-            background: #e74c3c;
-            padding: 5px 15px;
-            border-radius: 20px;
-            display: inline-block;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
     </style>
 </head>
 <body>
@@ -119,17 +127,29 @@
         <button class="btn order-btn" onclick="openModal('orderModal')">ZAMÓW</button>
         <button class="btn rules-btn" onclick="openModal('rulesModal')">REGULAMIN</button>
         <button class="btn collab-btn" onclick="openModal('collabModal')">🤝 WSPÓŁPRACA</button>
-        <div class="minecraft-banner-btn" onclick="openModal('mcModal')"></div>
+        
+        <div class="banner-btn mc-banner" onclick="openModal('mcModal')"></div>
+        
+        <div class="banner-btn dc-banner" onclick="openModal('dcModal')"></div>
     </div>
 
-    <div class="footer">mmcode.online © 2026 | <a href="https://discord.gg/4zVrNwWWmV" style="color:white">Discord</a></div>
+    <div class="footer">mmcode.online © 2026 | <a href="https://discord.gg/PD5ESSXBtp" style="color:white">Discord</a></div>
+
+    <div id="dcModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('dcModal')">×</span>
+            <h2>Nasz Discord</h2>
+            <p>To jest nasza oficjalna społeczność mmcode.online!</p>
+            <p style="font-size: 0.9rem; opacity: 0.8;">Kliknij poniżej, aby do nas dołączyć i pogadać.</p>
+            <a href="https://discord.gg/PD5ESSXBtp" target="_blank" class="join-dc-btn">DOŁĄCZ DO SERWERA</a>
+        </div>
+    </div>
 
     <div id="mcModal" class="modal-overlay">
         <div class="modal-content">
             <span class="close-btn" onclick="closeModal('mcModal')">×</span>
-            <div class="status-tag">JESZCZE NIE DOSTĘPNE</div>
+            <div style="background: #e74c3c; padding: 5px 15px; border-radius: 20px; display: inline-block; margin-bottom: 15px; font-weight: 600;">JESZCZE NIE DOSTĘPNE</div>
             <h2 style="margin: 10px 0;">Serwer Minecraft</h2>
-            <p style="opacity: 0.8;">Pracujemy nad naszym serwerem. Już wkrótce będziesz mógł do nas dołączyć!</p>
             <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; border: 1px dashed var(--primary); margin-top: 20px;">
                 <span style="display:block; font-size: 0.8rem; opacity: 0.6;">IP SERWERA:</span>
                 <code style="font-size: 1.2rem; color: var(--primary);">mc.mmcode.online</code>
@@ -144,7 +164,7 @@
             <form id="orderForm">
                 <input type="text" id="phone" placeholder="Twój Numer telefonu / Nick DC" required>
                 <input type="email" id="email" placeholder="Twój Adres E-mail" required>
-                <input type="text" id="title" placeholder="Tytuł projektu (np. Bot, Strona)" required>
+                <input type="text" id="title" placeholder="Tytuł projektu" required>
                 <textarea id="desc" rows="5" placeholder="Opis projektu..." required></textarea>
                 <button type="submit" class="submit-btn">WYŚLIJ ZAMÓWIENIE</button>
             </form>
@@ -157,8 +177,8 @@
             <h2 style="margin-top:0; color:var(--primary);">Prośba o współpracę</h2>
             <form id="collabForm">
                 <input type="text" id="serverName" placeholder="Nazwa Twojego serwera" required>
-                <input type="text" id="discordLink" placeholder="Link Discord do serwera" required>
-                <textarea id="adContent" rows="6" placeholder="Wklej tutaj treść swojej reklamy..." required></textarea>
+                <input type="text" id="discordLink" placeholder="Link Discord" required>
+                <textarea id="adContent" rows="6" placeholder="Treść reklamy..." required></textarea>
                 <button type="submit" class="submit-btn" style="background: var(--primary);">WYŚLIJ PROŚBĘ</button>
             </form>
         </div>
@@ -173,22 +193,8 @@
     </div>
 
     <script>
+        // Twój oryginalny JS bez zmian
         const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1483415994733953156/G7t2byCRkdbdZXE15Na8shY0ZkFH3UclgA1IQmZ8kLm-sEOjq_k41aNLCpnfXizMwHws";
-
-        function sendToDiscord(title, fields, modalId) {
-            fetch(DISCORD_WEBHOOK, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    username: "mmcode System",
-                    embeds: [{ title: title, color: 8216575, fields: fields, timestamp: new Date().toISOString() }]
-                })
-            }).then(() => {
-                alert('Wysłano pomyślnie!');
-                closeModal(modalId);
-                document.getElementById(modalId === 'orderModal' ? 'orderForm' : 'collabForm').reset();
-            }).catch(() => alert('Błąd wysyłki!'));
-        }
 
         document.getElementById('orderForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -208,6 +214,21 @@
                 { name: "📜 Treść Reklamy", value: document.getElementById('adContent').value }
             ], 'collabModal');
         });
+
+        function sendToDiscord(title, fields, modalId) {
+            fetch(DISCORD_WEBHOOK, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username: "mmcode System",
+                    embeds: [{ title: title, color: 8216575, fields: fields, timestamp: new Date().toISOString() }]
+                })
+            }).then(() => {
+                alert('Wysłano pomyślnie!');
+                closeModal(modalId);
+                document.getElementById(modalId === 'orderModal' ? 'orderForm' : 'collabForm').reset();
+            }).catch(() => alert('Błąd wysyłki!'));
+        }
 
         function openModal(id) {
             const m = document.getElementById(id);
