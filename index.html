@@ -55,13 +55,24 @@
             text-transform: uppercase;
             color: white;
             text-align: center;
+            text-decoration: none; /* Dodane dla linków */
         }
 
         .order-btn { background: var(--primary); box-shadow: 0 4px 15px rgba(125, 95, 255, 0.3); }
         .rules-btn { background: var(--glass); border: 1px solid var(--glass-border); backdrop-filter: blur(10px); }
         .collab-btn { grid-column: span 2; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); margin-top: 5px; }
         
-        /* Styl dla bannerów (Minecraft i nowy Discord) */
+        /* Styl dla przycisku bota (długi) */
+        .bot-btn { 
+            grid-column: span 2; 
+            background: linear-gradient(135deg, var(--primary) 0%, #5865F2 100%); 
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
         .banner-btn {
             grid-column: span 2;
             height: 110px;
@@ -73,18 +84,16 @@
             display: block;
         }
 
-        /* Używamy plików na maszynie */
         .mc-banner { background: url('mc-banner.png') center/cover; }
-        .dc-banner { background: url('dc-banner.png') center/cover; } /* Tu podaj nazwę fioletowego pliku */
+        .dc-banner { background: url('dc-banner.png') center/cover; }
 
         .btn:hover, .banner-btn:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.4); border-color: var(--primary); }
 
-        /* Styl dla przycisku w nowym okienku Discord */
         .join-dc-btn {
             display: inline-block;
             margin-top: 15px;
             padding: 12px 25px;
-            background: #5865F2; /* Kolor Discord */
+            background: #5865F2;
             color: white;
             text-decoration: none;
             border-radius: 10px;
@@ -124,12 +133,13 @@
     </div>
 
     <div class="btn-container">
+        <a href="http://bot.mmcode.online" class="btn bot-btn">🤖 NASZ BOT</a>
+
         <button class="btn order-btn" onclick="openModal('orderModal')">ZAMÓW</button>
         <button class="btn rules-btn" onclick="openModal('rulesModal')">REGULAMIN</button>
         <button class="btn collab-btn" onclick="openModal('collabModal')">🤝 WSPÓŁPRACA</button>
         
         <div class="banner-btn mc-banner" onclick="openModal('mcModal')"></div>
-        
         <div class="banner-btn dc-banner" onclick="openModal('dcModal')"></div>
     </div>
 
@@ -193,7 +203,7 @@
     </div>
 
     <script>
-        // Twój oryginalny JS bez zmian
+        // Twój oryginalny JS
         const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1483415994733953156/G7t2byCRkdbdZXE15Na8shY0ZkFH3UclgA1IQmZ8kLm-sEOjq_k41aNLCpnfXizMwHws";
 
         document.getElementById('orderForm').addEventListener('submit', function(e) {
