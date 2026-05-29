@@ -13,13 +13,23 @@
         }
 
         body {
-            background: radial-gradient(circle at center, #1e3c72 0%, #2a5298 50%, #081426 100%);
+            /* Ciemniejsze tło z dużym rozmiarem pod animację przebarwień */
+            background: radial-gradient(circle at 30% 30%, #102244 0%, #0a172c 40%, #030710 100%);
+            background-size: 200% 200%;
+            animation: backgroundMove 15s ease infinite alternate;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
             perspective: 1000px;
+        }
+
+        /* Animacja płynnego przesuwania się rozjaśnień w tle */
+        @keyframes backgroundMove {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 100%; }
         }
 
         /* Tło z latającymi kropeczkami */
@@ -35,16 +45,34 @@
 
         .particle {
             position: absolute;
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.4);
             border-radius: 50%;
-            animation: float text linear infinite;
+            animation: floatSmooth linear infinite;
         }
 
-        /* Animacja wejścia okienka i pulsowania */
+        /* Nowa, bardzo płynna animacja kropek w różnych kierunkach */
+        @keyframes floatSmooth {
+            0% {
+                transform: translateY(0) translateX(0) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(var(--move-y)) translateX(var(--move-x)) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Animacja wejścia okienka */
         @keyframes fadeInScale {
             0% {
                 opacity: 0;
-                transform: scale(0.8) translateZ(-100px);
+                transform: scale(0.9) translateZ(-50px);
             }
             100% {
                 opacity: 1;
@@ -56,24 +84,25 @@
         .card-container {
             position: relative;
             z-index: 2;
-            transition: transform 0.1s ease-out;
+            /* Zapewnia stałą maślaną płynność ruchu */
+            transition: transform 0.3s ease-out; 
             transform-style: preserve-3d;
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.07);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             padding: 3rem 2rem;
             border-radius: 24px;
             width: 90%;
             max-width: 500px;
             margin: 0 auto;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4),
-                        inset 0 0 20px rgba(255, 255, 255, 0.05);
-            animation: fadeInScale 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6),
+                        inset 0 0 20px rgba(255, 255, 255, 0.02);
+            animation: fadeInScale 1.5s cubic-bezier(0.1, 0.8, 0.2, 1) forwards;
             transform-style: preserve-3d;
         }
 
@@ -84,43 +113,28 @@
             font-weight: 800;
             margin-bottom: 1.5rem;
             letter-spacing: 1px;
-            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
-            transform: translateZ(40px);
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            transform: translateZ(30px);
         }
 
         .card h1 span {
             color: #ff4d4d;
-            text-shadow: 0 0 15px rgba(255, 77, 77, 0.5);
+            text-shadow: 0 0 15px rgba(255, 77, 77, 0.4);
         }
 
         .card p {
-            color: #e0e6ed;
+            color: #cbd5e1;
             font-size: 1.1rem;
             line-height: 1.6;
             margin-bottom: 1rem;
-            transform: translateZ(25px);
+            transform: translateZ(15px);
         }
 
         .card p.important {
             color: #ffb84d;
             font-weight: 600;
             margin-top: 1.5rem;
-            transform: translateZ(30px);
-        }
-
-        /* Style dla animacji kropek */
-        @keyframes float {
-            0% {
-                transform: translateY(105vh) scale(0);
-                opacity: 0;
-            }
-            50% {
-                opacity: 0.8;
-            }
-            100% {
-                transform: translateY(-5vh) scale(1);
-                opacity: 0;
-            }
+            transform: translateZ(20px);
         }
     </style>
 </head>
@@ -137,48 +151,63 @@
     </div>
 
     <script>
-        // 1. Generowanie latających kropek w tle
+        // 1. Generowanie od 80 do 110 płynnych kropek na całym ekranie
         const particlesContainer = document.getElementById('particles');
-        const particleCount = 60;
+        const minParticles = 80;
+        const maxParticles = 110;
+        const particleCount = Math.floor(Math.random() * (maxParticles - minParticles + 1)) + minParticles;
 
         for (let i = 0; i < particleCount; i++) {
             const particle = document.createElement('div');
             particle.classList.add('particle');
             
-            // Losowe parametry dla kropek
-            const size = Math.random() * 5 + 2;
-            const posX = Math.random() * 100;
-            const delay = Math.random() * 10;
-            const duration = Math.random() * 15 + 10;
+            // Rozrzucenie kropek losowo po całym ekranie na start
+            const size = Math.random() * 4 + 1.5;
+            const startX = Math.random() * 100;
+            const startY = Math.random() * 100;
+            
+            // Losowy wektor ruchu (gładkie przemieszczanie się)
+            const moveX = (Math.random() - 0.5) * 200; // -100px do 100px
+            const moveY = (Math.random() - 0.7) * 250; // Bardziej w górę, ale też na boki
+            
+            const delay = Math.random() * -20; // Ujemny delay, żeby kropki były na ekranie od razu po załadowaniu
+            const duration = Math.random() * 20 + 15; // Wolny, płynny ruch (15s - 35s)
 
             particle.style.width = `${size}px`;
             particle.style.height = `${size}px`;
-            particle.style.left = `${posX}%`;
+            particle.style.left = `${startX}%`;
+            particle.style.top = `${startY}%`;
+            
+            // Przekazanie zmiennych ruchu do CSS
+            particle.style.setProperty('--move-x', `${moveX}px`);
+            particle.style.setProperty('--move-y', `${moveY}px`);
+            
             particle.style.animationDelay = `${delay}s`;
             particle.style.animationDuration = `${duration}s`;
 
             particlesContainer.appendChild(particle);
         }
 
-        // 2. Efekt animacji okienka przy przesuwaniu myszką (3D Tilt)
+        // 2. Bardzo płynny, delikatny efekt 3D Tilt dla okienka
         const container = document.getElementById('cardContainer');
         
         document.addEventListener('mousemove', (e) => {
-            const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
-            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+            // Zwiększono dzielnik z 25 na 60 -> ruch jest znacznie mniej agresywny i subtelniejszy
+            const xAxis = (window.innerWidth / 2 - e.clientX) / 60;
+            const yAxis = (window.innerHeight / 2 - e.clientY) / 60;
             
-            // Obracamy okienko w zależności od pozycji myszki
             container.style.transform = `rotateY(${xAxis}deg) rotateX(${-yAxis}deg)`;
         });
 
-        // Resetowanie pozycji, gdy myszka zejdzie z ekranu
+        // Płynny powrót do pozycji wyjściowej po opuszczeniu ekranu
         document.addEventListener('mouseleave', () => {
+            container.style.transition = 'transform 0.8s ease-out';
             container.style.transform = `rotateY(0deg) rotateX(0deg)`;
-            container.style.transition = 'transform 0.5s ease';
         });
 
-        document.addEventListener('mouseenter', () => {
-            container.style.transition = 'none';
+        // Przywrócenie krótkiego transition podczas ruchu myszką, by zachować pełen "smooth"
+        document.addEventListener('mousemove', () => {
+            container.style.transition = 'transform 0.3s ease-out';
         });
     </script>
 </body>
