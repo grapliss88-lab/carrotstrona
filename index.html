@@ -3,265 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mmcode.online</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>MMCODE.ONLINE - Koniec</title>
     <style>
-        :root {
-            --primary: #7d5fff;
-            --bg: #0f081d;
-            --glass: rgba(255, 255, 255, 0.07);
-            --glass-border: rgba(255, 255, 255, 0.12);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
-            background: var(--bg);
-            color: white;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            background: radial-gradient(circle at center, #1e3c72 0%, #2a5298 50%, #081426 100%);
             min-height: 100vh;
-            overflow: hidden;
-            background: radial-gradient(circle at 50% 50%, #1e123a 0%, #0f081d 100%);
-        }
-
-        #particles-js { position: absolute; width: 100%; height: 100%; z-index: -1; }
-        .dot { position: absolute; background: white; border-radius: 50%; opacity: 0.3; animation: twinkle var(--duration) infinite; }
-        @keyframes twinkle { 0%, 100% { opacity: 0.1; } 50% { opacity: 0.6; } }
-
-        .header-logo { text-align: center; z-index: 10; margin-bottom: 30px; }
-        .header-logo h1 { font-size: 3rem; margin: 0; letter-spacing: -2px; }
-        .header-logo span { color: var(--primary); }
-
-        .btn-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            width: 90%;
-            max-width: 450px;
-            z-index: 10;
-        }
-
-        .btn {
-            padding: 20px;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: none;
-            text-transform: uppercase;
-            color: white;
-            text-align: center;
-            text-decoration: none; /* Dodane dla linków */
-        }
-
-        .order-btn { background: var(--primary); box-shadow: 0 4px 15px rgba(125, 95, 255, 0.3); }
-        .rules-btn { background: var(--glass); border: 1px solid var(--glass-border); backdrop-filter: blur(10px); }
-        .collab-btn { grid-column: span 2; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); margin-top: 5px; }
-        
-        /* Styl dla przycisku bota (długi) */
-        .bot-btn { 
-            grid-column: span 2; 
-            background: linear-gradient(135deg, var(--primary) 0%, #5865F2 100%); 
-            margin-bottom: 5px;
             display: flex;
-            align-items: center;
             justify-content: center;
-            gap: 10px;
+            align-items: center;
+            overflow: hidden;
+            perspective: 1000px;
         }
 
-        .banner-btn {
-            grid-column: span 2;
-            height: 110px;
-            border-radius: 15px;
-            border: 2px solid var(--glass-border);
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 5px;
-            display: block;
+        /* Tło z latającymi kropeczkami */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            pointer-events: none;
         }
 
-        .mc-banner { background: url('mc-banner.png') center/cover; }
-        .dc-banner { background: url('dc-banner.png') center/cover; }
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float text linear infinite;
+        }
 
-        .btn:hover, .banner-btn:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.4); border-color: var(--primary); }
+        /* Animacja wejścia okienka i pulsowania */
+        @keyframes fadeInScale {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) translateZ(-100px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateZ(0);
+            }
+        }
 
-        .join-dc-btn {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 12px 25px;
-            background: #5865F2;
-            color: white;
-            text-decoration: none;
-            border-radius: 10px;
+        /* Główny kontener (okienko) */
+        .card-container {
+            position: relative;
+            z-index: 2;
+            transition: transform 0.1s ease-out;
+            transform-style: preserve-3d;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 3rem 2rem;
+            border-radius: 24px;
+            width: 90%;
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4),
+                        inset 0 0 20px rgba(255, 255, 255, 0.05);
+            animation: fadeInScale 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            transform-style: preserve-3d;
+        }
+
+        /* Elementy wewnątrz okienka z efektem głębi 3D */
+        .card h1 {
+            color: #ffffff;
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            transform: translateZ(40px);
+        }
+
+        .card h1 span {
+            color: #ff4d4d;
+            text-shadow: 0 0 15px rgba(255, 77, 77, 0.5);
+        }
+
+        .card p {
+            color: #e0e6ed;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            transform: translateZ(25px);
+        }
+
+        .card p.important {
+            color: #ffb84d;
             font-weight: 600;
-            transition: 0.3s;
+            margin-top: 1.5rem;
+            transform: translateZ(30px);
         }
-        .join-dc-btn:hover { background: #4752c4; }
 
-        .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.92); backdrop-filter: blur(15px); z-index: 100; opacity: 0; transition: opacity 0.3s;
+        /* Style dla animacji kropek */
+        @keyframes float {
+            0% {
+                transform: translateY(105vh) scale(0);
+                opacity: 0;
+            }
+            50% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-5vh) scale(1);
+                opacity: 0;
+            }
         }
-        .modal-content {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            background: rgba(20, 10, 40, 0.6); padding: 35px; border-radius: 25px;
-            border: 1px solid var(--glass-border); width: 90%; max-width: 550px;
-            max-height: 85vh; overflow-y: auto; text-align: center;
-        }
-        .close-btn { float: right; cursor: pointer; font-size: 2rem; line-height: 1; opacity: 0.5; }
-
-        input, textarea { 
-            width: 100%; padding: 14px; margin: 8px 0; 
-            background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); 
-            border-radius: 12px; color: white; font-family: inherit; box-sizing: border-box;
-        }
-        .submit-btn { width: 100%; padding: 16px; background: #2ecc71; border: none; color: white; font-weight: 600; border-radius: 12px; cursor: pointer; margin-top: 15px; }
-
-        .footer { position: absolute; bottom: 20px; z-index: 10; opacity: 0.5; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
-    <div id="particles-js"></div>
+    <div class="particles" id="particles"></div>
 
-    <div class="header-logo">
-        <h1>mmcode<span>.online</span></h1>
-    </div>
-
-    <div class="btn-container">
-        <a href="http://bot.mmcode.online" class="btn bot-btn">🤖 NASZ BOT</a>
-
-        <button class="btn order-btn" onclick="openModal('orderModal')">ZAMÓW</button>
-        <button class="btn rules-btn" onclick="openModal('rulesModal')">REGULAMIN</button>
-        <button class="btn collab-btn" onclick="openModal('collabModal')">🤝 WSPÓŁPRACA</button>
-        
-        <div class="banner-btn mc-banner" onclick="openModal('mcModal')"></div>
-        <div class="banner-btn dc-banner" onclick="openModal('dcModal')"></div>
-    </div>
-
-    <div class="footer">mmcode.online © 2026 | <a href="https://discord.gg/PD5ESSXBtp" style="color:white">Discord</a></div>
-
-    <div id="dcModal" class="modal-overlay">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('dcModal')">×</span>
-            <h2>Nasz Discord</h2>
-            <p>To jest nasza oficjalna społeczność mmcode.online!</p>
-            <p style="font-size: 0.9rem; opacity: 0.8;">Kliknij poniżej, aby do nas dołączyć i pogadać.</p>
-            <a href="https://discord.gg/PD5ESSXBtp" target="_blank" class="join-dc-btn">DOŁĄCZ DO SERWERA</a>
-        </div>
-    </div>
-
-    <div id="mcModal" class="modal-overlay">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('mcModal')">×</span>
-            <div style="background: #e74c3c; padding: 5px 15px; border-radius: 20px; display: inline-block; margin-bottom: 15px; font-weight: 600;">JESZCZE NIE DOSTĘPNE</div>
-            <h2 style="margin: 10px 0;">Serwer Minecraft</h2>
-            <div style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; border: 1px dashed var(--primary); margin-top: 20px;">
-                <span style="display:block; font-size: 0.8rem; opacity: 0.6;">IP SERWERA:</span>
-                <code style="font-size: 1.2rem; color: var(--primary);">mc.mmcode.online</code>
-            </div>
-        </div>
-    </div>
-
-    <div id="orderModal" class="modal-overlay">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('orderModal')">×</span>
-            <h2 style="margin-top:0">Składanie zamówienia</h2>
-            <form id="orderForm">
-                <input type="text" id="phone" placeholder="Twój Numer telefonu / Nick DC" required>
-                <input type="email" id="email" placeholder="Twój Adres E-mail" required>
-                <input type="text" id="title" placeholder="Tytuł projektu" required>
-                <textarea id="desc" rows="5" placeholder="Opis projektu..." required></textarea>
-                <button type="submit" class="submit-btn">WYŚLIJ ZAMÓWIENIE</button>
-            </form>
-        </div>
-    </div>
-
-    <div id="collabModal" class="modal-overlay">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('collabModal')">×</span>
-            <h2 style="margin-top:0; color:var(--primary);">Prośba o współpracę</h2>
-            <form id="collabForm">
-                <input type="text" id="serverName" placeholder="Nazwa Twojego serwera" required>
-                <input type="text" id="discordLink" placeholder="Link Discord" required>
-                <textarea id="adContent" rows="6" placeholder="Treść reklamy..." required></textarea>
-                <button type="submit" class="submit-btn" style="background: var(--primary);">WYŚLIJ PROŚBĘ</button>
-            </form>
-        </div>
-    </div>
-
-    <div id="rulesModal" class="modal-overlay">
-        <div class="modal-content">
-            <span class="close-btn" onclick="closeModal('rulesModal')">×</span>
-            <h2 style="color:var(--primary); margin-top:0">Regulamin mmcode</h2>
-            <p>1.1 Brak ticketów bez powodu.<br>1.2 Zakaz treści +18.<br>2.1 Płatności tylko u @borexxx.<br>2.2 BLIK / PSC / Przelew.</p>
+    <div class="card-container" id="cardContainer">
+        <div class="card">
+            <h1>MMCODE.ONLINE x <span>KONIEC</span></h1>
+            <p>Z racji tego, że nikt nic nie kupował,</p>
+            <p class="important">zamykamy możliwości zakupu<br>oraz serwer Discord.</p>
         </div>
     </div>
 
     <script>
-        // Twój oryginalny JS
-        const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1483415994733953156/G7t2byCRkdbdZXE15Na8shY0ZkFH3UclgA1IQmZ8kLm-sEOjq_k41aNLCpnfXizMwHws";
+        // 1. Generowanie latających kropek w tle
+        const particlesContainer = document.getElementById('particles');
+        const particleCount = 60;
 
-        document.getElementById('orderForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            sendToDiscord("🚀 NOWE ZAMÓWIENIE!", [
-                { name: "📱 Kontakt", value: document.getElementById('phone').value, inline: true },
-                { name: "📧 Email", value: document.getElementById('email').value, inline: true },
-                { name: "📌 Tytuł", value: document.getElementById('title').value },
-                { name: "📝 Opis", value: document.getElementById('desc').value }
-            ], 'orderModal');
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            
+            // Losowe parametry dla kropek
+            const size = Math.random() * 5 + 2;
+            const posX = Math.random() * 100;
+            const delay = Math.random() * 10;
+            const duration = Math.random() * 15 + 10;
+
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${posX}%`;
+            particle.style.animationDelay = `${delay}s`;
+            particle.style.animationDuration = `${duration}s`;
+
+            particlesContainer.appendChild(particle);
+        }
+
+        // 2. Efekt animacji okienka przy przesuwaniu myszką (3D Tilt)
+        const container = document.getElementById('cardContainer');
+        
+        document.addEventListener('mousemove', (e) => {
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+            
+            // Obracamy okienko w zależności od pozycji myszki
+            container.style.transform = `rotateY(${xAxis}deg) rotateX(${-yAxis}deg)`;
         });
 
-        document.getElementById('collabForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            sendToDiscord("🤝 NOWA PROŚBA O WSPÓŁPRACĘ!", [
-                { name: "🏰 Nazwa Serwera", value: document.getElementById('serverName').value },
-                { name: "🔗 Link Discord", value: document.getElementById('discordLink').value },
-                { name: "📜 Treść Reklamy", value: document.getElementById('adContent').value }
-            ], 'collabModal');
+        // Resetowanie pozycji, gdy myszka zejdzie z ekranu
+        document.addEventListener('mouseleave', () => {
+            container.style.transform = `rotateY(0deg) rotateX(0deg)`;
+            container.style.transition = 'transform 0.5s ease';
         });
 
-        function sendToDiscord(title, fields, modalId) {
-            fetch(DISCORD_WEBHOOK, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    username: "mmcode System",
-                    embeds: [{ title: title, color: 8216575, fields: fields, timestamp: new Date().toISOString() }]
-                })
-            }).then(() => {
-                alert('Wysłano pomyślnie!');
-                closeModal(modalId);
-                document.getElementById(modalId === 'orderModal' ? 'orderForm' : 'collabForm').reset();
-            }).catch(() => alert('Błąd wysyłki!'));
-        }
-
-        function openModal(id) {
-            const m = document.getElementById(id);
-            m.style.display = 'block';
-            setTimeout(() => m.style.opacity = '1', 10);
-        }
-        function closeModal(id) {
-            const m = document.getElementById(id);
-            m.style.opacity = '0';
-            setTimeout(() => m.style.display = 'none', 300);
-        }
-
-        const container = document.getElementById('particles-js');
-        for (let i = 0; i < 50; i++) {
-            const dot = document.createElement('div');
-            dot.className = 'dot';
-            dot.style.left = Math.random() * 100 + '%';
-            dot.style.top = Math.random() * 100 + '%';
-            const size = Math.random() * 3 + 'px';
-            dot.style.width = size; dot.style.height = size;
-            dot.style.setProperty('--duration', Math.random() * 3 + 2 + 's');
-            container.appendChild(dot);
-        }
+        document.addEventListener('mouseenter', () => {
+            container.style.transition = 'none';
+        });
     </script>
 </body>
 </html>
